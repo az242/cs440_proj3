@@ -29,6 +29,7 @@ import javax.swing.event.ChangeListener;
  */
 public class UI2 extends javax.swing.JFrame implements ActionListener, MouseWheelListener {
 	Map[] LoadedMaps;
+	TruthData[] LoadedTruth;
 	private Display Map;
 
 	public UI2() {
@@ -38,6 +39,7 @@ public class UI2 extends javax.swing.JFrame implements ActionListener, MouseWhee
 	@SuppressWarnings("unchecked")
 	private void initComponents() {
 		LoadedMaps = FileUtils.getMapList();
+		LoadedTruth = null;
 		Timer myTimer;
 		myTimer = new Timer(500, this);
 		myTimer.start();
@@ -48,7 +50,7 @@ public class UI2 extends javax.swing.JFrame implements ActionListener, MouseWhee
 		changeMapButton = new JButton();
 		changeGoalButton = new JButton();
 		scaleFitCheckbox = new JCheckBox();
-		showGoalsCheckbox = new JCheckBox();
+		showDataCheckbox = new JCheckBox();
 		displayStatsCheckbox = new JCheckBox();
 		showAICheckbox = new JCheckBox();
 		generateMapButton = new JButton();
@@ -56,19 +58,19 @@ public class UI2 extends javax.swing.JFrame implements ActionListener, MouseWhee
 		button6 = new JButton();
 		label3 = new javax.swing.JLabel();
 		label4 = new javax.swing.JLabel();
-		aiWeightSlider = new javax.swing.JSlider();
+		dimensionSlider = new javax.swing.JSlider();
 		label5 = new javax.swing.JLabel();
-		speedSlider = new javax.swing.JSlider();
+		moveMakerSlider = new javax.swing.JSlider();
 		startAIButton = new JButton();
 		label6 = new javax.swing.JLabel();
 		jScrollPane2 = new javax.swing.JScrollPane();
 		mapList = new javax.swing.JList<>(mapListElements);
 		jScrollPane3 = new javax.swing.JScrollPane();
-		goalList = new javax.swing.JList<>(goalListElements);
+		goalList = new javax.swing.JList<>(moveListElements);
 		label7 = new javax.swing.JLabel();
 		label8 = new javax.swing.JLabel();
 		helpButton = new JButton();
-		zoomSlider = new javax.swing.JSlider();
+		moveSlider = new javax.swing.JSlider();
 		label9 = new javax.swing.JLabel();
 		jlabel1 = new javax.swing.JLabel();
 
@@ -102,10 +104,10 @@ public class UI2 extends javax.swing.JFrame implements ActionListener, MouseWhee
 		scaleFitCheckbox.setText("Scale Fit");
 		scaleFitCheckbox.setName("Scale"); // NOI18N
 
-		showGoalsCheckbox.setText("Show Field Data");
-		showGoalsCheckbox.setSelected(true);
+		showDataCheckbox.setText("Show Field Data");
+		showDataCheckbox.setSelected(true);
 		;
-		showGoalsCheckbox.setName("GoalCheck"); // NOI18N
+		showDataCheckbox.setName("GoalCheck"); // NOI18N
 
 		displayStatsCheckbox.setText("Show Stats");
 		displayStatsCheckbox.setName("Stats"); // NOI18N
@@ -139,14 +141,14 @@ public class UI2 extends javax.swing.JFrame implements ActionListener, MouseWhee
 		label4.setName("AIWeightLabel"); // NOI18N
 		label4.setText("Size: 50");
 
-		aiWeightSlider.setToolTipText("Slider For AI Weight");
-		aiWeightSlider.setName("weightSlider"); // NOI18N
-		aiWeightSlider.setMaximum(100);
-		aiWeightSlider.setMinimum(1);
-		aiWeightSlider.setValue(50);
-		aiWeightSlider.setPaintTicks(true);
-		aiWeightSlider.setMinorTickSpacing(10);
-		aiWeightSlider.addChangeListener(new ChangeListener() {
+		dimensionSlider.setToolTipText("Slider For map dimensions");
+		dimensionSlider.setName("dimensionSlider"); // NOI18N
+		dimensionSlider.setMaximum(100);
+		dimensionSlider.setMinimum(1);
+		dimensionSlider.setValue(50);
+		dimensionSlider.setPaintTicks(true);
+		dimensionSlider.setMinorTickSpacing(10);
+		dimensionSlider.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				// TODO Auto-generated method stub
@@ -157,31 +159,33 @@ public class UI2 extends javax.swing.JFrame implements ActionListener, MouseWhee
 
 
 
-		zoomSlider.setName("zoomSlider");
-		zoomSlider.setMinimum(1);
-		zoomSlider.setMaximum(400);
-		zoomSlider.setValue(50);
-		zoomSlider.setPaintTicks(true);
-		zoomSlider.setMinorTickSpacing(10);
-		zoomSlider.addChangeListener(new ChangeListener() {
+		moveSlider.setName("moveSlider");
+		moveSlider.setMinimum(1);
+		moveSlider.setMaximum(100);
+		moveSlider.setValue(1);
+		moveSlider.setPaintTicks(true);
+		moveSlider.setMinorTickSpacing(5);
+		moveSlider.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				// TODO Auto-generated method stub
+				if(Map.getMap()==null)
+					return;
 				JSlider source = (JSlider) e.getSource();
-				Map.setZoom((int) source.getValue() / 10.0);
-				label9.setText("Zoom: " + (int) source.getValue() / 10.0);
+				//set map step
+				label9.setText("Step: " + (int) source.getValue());
 			}
 		});
 		
-		label5.setName("AISpeedLabel"); // NOI18N
+		label5.setName("moveLabel"); // NOI18N
 		label5.setText("Moves: 50");
 		
-		speedSlider.setName("speedSlider"); // NOI18N
-		speedSlider.setMinimum(1);
-		speedSlider.setMaximum(100);
-		speedSlider.setPaintTicks(true);
-		speedSlider.setMinorTickSpacing(10);
-		speedSlider.addChangeListener(new ChangeListener() {
+		moveMakerSlider.setName("moveMakerSlider"); // NOI18N
+		moveMakerSlider.setMinimum(1);
+		moveMakerSlider.setMaximum(100);
+		moveMakerSlider.setPaintTicks(true);
+		moveMakerSlider.setMinorTickSpacing(10);
+		moveMakerSlider.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				// TODO Auto-generated method stub
@@ -222,7 +226,7 @@ public class UI2 extends javax.swing.JFrame implements ActionListener, MouseWhee
 		});
 
 		label9.setName("ZoomLabel"); // NOI18N
-		label9.setText("Zoom");
+		label9.setText("Step:  ");
 
 		jlabel1.setText("By: Andrew Zhu & Richard Li");
 		jlabel1.setName("nameLabel"); // NOI18N
@@ -267,7 +271,7 @@ public class UI2 extends javax.swing.JFrame implements ActionListener, MouseWhee
 										.addComponent(displayStatsCheckbox, javax.swing.GroupLayout.PREFERRED_SIZE, 200,
 												javax.swing.GroupLayout.PREFERRED_SIZE))
 								.addGroup(layout.createSequentialGroup()
-										.addComponent(showGoalsCheckbox, javax.swing.GroupLayout.PREFERRED_SIZE, 200,
+										.addComponent(showDataCheckbox, javax.swing.GroupLayout.PREFERRED_SIZE, 200,
 												javax.swing.GroupLayout.PREFERRED_SIZE)
 										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 										.addComponent(showAICheckbox, javax.swing.GroupLayout.PREFERRED_SIZE, 200,
@@ -281,11 +285,11 @@ public class UI2 extends javax.swing.JFrame implements ActionListener, MouseWhee
 										.addComponent(label5, javax.swing.GroupLayout.PREFERRED_SIZE, 200,
 												javax.swing.GroupLayout.PREFERRED_SIZE))
 								.addGroup(layout.createSequentialGroup()
-										.addComponent(aiWeightSlider, javax.swing.GroupLayout.PREFERRED_SIZE,
+										.addComponent(dimensionSlider, javax.swing.GroupLayout.PREFERRED_SIZE,
 												javax.swing.GroupLayout.DEFAULT_SIZE,
 												javax.swing.GroupLayout.PREFERRED_SIZE)
 										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-										.addComponent(speedSlider, javax.swing.GroupLayout.PREFERRED_SIZE,
+										.addComponent(moveMakerSlider, javax.swing.GroupLayout.PREFERRED_SIZE,
 												javax.swing.GroupLayout.DEFAULT_SIZE,
 												javax.swing.GroupLayout.PREFERRED_SIZE))
 								.addGroup(layout.createSequentialGroup()
@@ -300,7 +304,7 @@ public class UI2 extends javax.swing.JFrame implements ActionListener, MouseWhee
 										.addGap(12, 12, 12).addComponent(button6,
 												javax.swing.GroupLayout.PREFERRED_SIZE, 200,
 												javax.swing.GroupLayout.PREFERRED_SIZE))
-								.addComponent(zoomSlider, javax.swing.GroupLayout.DEFAULT_SIZE,
+								.addComponent(moveSlider, javax.swing.GroupLayout.DEFAULT_SIZE,
 										javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 								.addComponent(jlabel1, javax.swing.GroupLayout.DEFAULT_SIZE,
 										javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -358,7 +362,7 @@ public class UI2 extends javax.swing.JFrame implements ActionListener, MouseWhee
 												javax.swing.GroupLayout.PREFERRED_SIZE))
 								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-										.addComponent(showGoalsCheckbox, javax.swing.GroupLayout.PREFERRED_SIZE,
+										.addComponent(showDataCheckbox, javax.swing.GroupLayout.PREFERRED_SIZE,
 												javax.swing.GroupLayout.DEFAULT_SIZE,
 												javax.swing.GroupLayout.PREFERRED_SIZE)
 										.addComponent(showAICheckbox, javax.swing.GroupLayout.PREFERRED_SIZE,
@@ -385,10 +389,10 @@ public class UI2 extends javax.swing.JFrame implements ActionListener, MouseWhee
 												javax.swing.GroupLayout.PREFERRED_SIZE))
 								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-										.addComponent(aiWeightSlider, javax.swing.GroupLayout.PREFERRED_SIZE,
+										.addComponent(dimensionSlider, javax.swing.GroupLayout.PREFERRED_SIZE,
 												javax.swing.GroupLayout.DEFAULT_SIZE,
 												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addComponent(speedSlider, javax.swing.GroupLayout.PREFERRED_SIZE,
+										.addComponent(moveMakerSlider, javax.swing.GroupLayout.PREFERRED_SIZE,
 												javax.swing.GroupLayout.DEFAULT_SIZE,
 												javax.swing.GroupLayout.PREFERRED_SIZE))
 								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -403,7 +407,7 @@ public class UI2 extends javax.swing.JFrame implements ActionListener, MouseWhee
 								.addComponent(label9, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
 								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-								.addComponent(zoomSlider, javax.swing.GroupLayout.PREFERRED_SIZE,
+								.addComponent(moveSlider, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
 								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 								.addComponent(jlabel1, javax.swing.GroupLayout.DEFAULT_SIZE,
@@ -416,10 +420,14 @@ public class UI2 extends javax.swing.JFrame implements ActionListener, MouseWhee
 		// TODO add your handling code here:
 		// change map
 		String mapWanted = mapList.getSelectedValue();
-		goalListElements.clear();
+		moveListElements.clear();
 		for (int x = 0; x < LoadedMaps.length; x++) {
 			if (LoadedMaps[x].getName().equals(mapWanted)) {
 				Map.setNewMap(LoadedMaps[x]);
+				LoadedTruth = FileUtils.getTruthDataList(LoadedMaps[x].getName().substring(0,LoadedMaps[x].getName().length()-4));
+				for (int w = 0; w < LoadedTruth.length; w++) {
+					moveListElements.addElement(LoadedTruth[w].getName()+" moves: "+LoadedTruth[w].getMoveData().length);
+				}
 				return;
 			}
 		}
@@ -427,7 +435,9 @@ public class UI2 extends javax.swing.JFrame implements ActionListener, MouseWhee
 
 	private void changeGoalButtonActionPerformed(java.awt.event.ActionEvent evt) {
 		// TODO add your handling code here:
-		// change goals
+		// change moves
+		
+		
 		
 	}
 
@@ -455,7 +465,7 @@ public class UI2 extends javax.swing.JFrame implements ActionListener, MouseWhee
 				for (int x = 0; x < tempMaps.length; x++) {
 					LoadedMaps[x] = tempMaps[x];
 				}
-				LoadedMaps[LoadedMaps.length - 1] = MapGenerator.createMap(name + ".txt",aiWeightSlider.getValue());
+				LoadedMaps[LoadedMaps.length - 1] = MapGenerator.createMap(name + ".txt",dimensionSlider.getValue());
 				mapListElements.addElement(name + ".txt");
 				System.out.println("Created new map!");
 			} catch (IOException e) {
@@ -468,7 +478,39 @@ public class UI2 extends javax.swing.JFrame implements ActionListener, MouseWhee
 	private void button6ActionPerformed(java.awt.event.ActionEvent evt) {
 		// TODO add your handling code here:
 		// TEST BUTTON
-		
+		if(Map.getMap()==null){
+			JOptionPane.showMessageDialog(null, "No map set!");
+			return;
+		}
+		boolean contains = false;
+		String name = "";
+		do {
+			contains = false;
+			name = JOptionPane.showInputDialog(
+					"Enter a name for your moves! (note cannot already exist and must be atleast 3 characters long!)");
+			if (name == null)
+				return;
+			for (int x = 0; x < LoadedTruth.length; x++) {
+				if (LoadedTruth[x].getName().equals(name + ".txt")) {
+					contains = true;
+				}
+			}
+		} while (contains);
+		if (name.trim().length() > 3) {
+			try {
+				TruthData[] tempMaps = LoadedTruth;
+				LoadedTruth = new TruthData[tempMaps.length + 1];
+				for (int x = 0; x < tempMaps.length; x++) {
+					LoadedTruth[x] = tempMaps[x];
+				}
+				LoadedTruth[LoadedTruth.length - 1] = MapGenerator.createMoves(name + ".txt",moveMakerSlider.getValue(),Map.getMap());
+				moveListElements.addElement(name + ".txt");
+				System.out.println("Created new Move list!");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 	private void startAIButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -530,7 +572,7 @@ public class UI2 extends javax.swing.JFrame implements ActionListener, MouseWhee
 
 	// Variables declaration - do not modify
 	private DefaultListModel mapListElements = new DefaultListModel();
-	private DefaultListModel goalListElements = new DefaultListModel();
+	private DefaultListModel moveListElements = new DefaultListModel();
 	private javax.swing.JButton changeMapButton;
 	private javax.swing.JButton changeGoalButton;
 	private javax.swing.JButton generateMapButton;
@@ -538,7 +580,7 @@ public class UI2 extends javax.swing.JFrame implements ActionListener, MouseWhee
 	private javax.swing.JButton button6;
 	private javax.swing.JButton helpButton;
 	private JCheckBox scaleFitCheckbox;
-	private JCheckBox showGoalsCheckbox;
+	private JCheckBox showDataCheckbox;
 	private JCheckBox displayStatsCheckbox;
 	private JCheckBox showAICheckbox;
 	private javax.swing.JLabel jlabel1;
@@ -547,9 +589,9 @@ public class UI2 extends javax.swing.JFrame implements ActionListener, MouseWhee
 	private javax.swing.JPanel jPanel1;
 	private javax.swing.JScrollPane jScrollPane2;
 	private javax.swing.JScrollPane jScrollPane3;
-	private javax.swing.JSlider aiWeightSlider;
-	private javax.swing.JSlider speedSlider;
-	private javax.swing.JSlider zoomSlider;
+	private javax.swing.JSlider dimensionSlider;
+	private javax.swing.JSlider moveMakerSlider;
+	private javax.swing.JSlider moveSlider;
 	private javax.swing.JLabel label1;
 	private javax.swing.JLabel label2;
 	private javax.swing.JLabel label3;
@@ -559,14 +601,19 @@ public class UI2 extends javax.swing.JFrame implements ActionListener, MouseWhee
 	private javax.swing.JLabel label7;
 	private javax.swing.JLabel label8;
 	private javax.swing.JLabel label9;
-
+	private double zoom=100;
 	// End of variables declaration
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent arg0) {
 		// TODO Auto-generated method stub
-		zoomSlider.setValue(zoomSlider.getValue() - arg0.getWheelRotation() * 2);
-		// System.out.println(speedSlider.getValue()/10.0);
-		Map.setZoom(zoomSlider.getValue() / 10.0);
+		zoom = zoom - arg0.getWheelRotation() * 2;
+		if(zoom<.5){
+			zoom=1;
+		}else if(zoom>200){
+			zoom=200;
+		}
+		// System.out.println(moveMakerSlider.getValue()/10.0);
+		Map.setZoom(zoom/ 10.0);
 	}
 
 	@Override

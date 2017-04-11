@@ -3,7 +3,10 @@
 public class Coord {
 	private int x;
 	private int y;
-
+	public Coord(String coord){
+		this.x = Integer.parseInt(coord.split(",")[0]);
+		this.y = Integer.parseInt(coord.split(",")[1]);
+	}
 	public Coord(int x, int y) {
 		this.x = x;
 		this.y = y;

@@ -1,5 +1,6 @@
 
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -50,7 +51,8 @@ public class MapGenerator {
 		}
 
 		Files.write(file, linesToWrite, Charset.forName("UTF-8"));
-
+		String currentDir = new File("").getAbsolutePath();
+		new File(currentDir+"\\"+name.substring(0,name.length()-4)).mkdir();
 		return new Map(name);
 	}
 
@@ -69,8 +71,12 @@ public class MapGenerator {
 		}
 		return map;
 	}
-	public static Map createMoves(String name,int moveSize) throws IOException {
+	public static TruthData createMoves(String name,int moveSize,Map map) throws IOException {
+		name = map.getName().substring(0,map.getName().length()-4)+"\\"+"total,"+moveSize+","+name+".txt";
 		Path file = Paths.get(name);
+		char[] moveData = new char[moveSize];
+		char[] sensorReading = new char[moveSize];
+		Coord[] coordData = new Coord[moveSize];
 		/*
 		Coord init;
 		Coord[] TrueCordData;
@@ -78,46 +84,91 @@ public class MapGenerator {
 		char[] sensorReading;
 		*/
 		
-		for(int x=0;x<moveSize;x++){
-			
-		}
 		List<String> linesToWrite = new ArrayList<String>();
-		
-		for (int i = 0; i < map[0].length; i++) {
-			String tmp = "";
-			for (int j = 0; j < map.length; j++) {
-				tmp += map[j][i];
+		//init coord
+		Coord current = new Coord((int)(Math.random()*map.getCellMap().length),(int)(Math.random()*map.getCellMap().length) );
+		linesToWrite.add(current.getX()+" "+current.getY());
+		System.out.println(current.toString());
+		//generate moves
+		for(int x=0;x<moveSize;x++){
+			double temp = Math.random();
+			if(temp<.25){
+				moveData[x] = 'U';
+			}else if(temp>=.25 && temp<.5){
+				moveData[x] = 'L';
+			}else if(temp>=.5 && temp<.75){
+				moveData[x] = 'D';
+			}else{
+				moveData[x] = 'R';
 			}
-			linesToWrite.add(tmp);
 		}
-
+		
+		//coord data
+		
+		for(int x=0;x<moveSize;x++){
+			int xunit = 0;
+			int yunit = 0;
+			switch(moveData[x]){
+			case 'U':
+				if(current.getY()-1>=0 && Math.random()<.9)
+					yunit=-1;
+				break;
+			case 'L':
+				if(current.getX()-1>=0 && Math.random()<.9)
+					xunit=-1;
+				break;
+			case 'D':
+				if(current.getY()+1<map.getCellMap().length && Math.random()<.9)
+					yunit=1;
+				break;
+			case 'R':
+				if(current.getX()+1<map.getCellMap().length && Math.random()<.9)
+					xunit=1;
+				break;
+			}
+			coordData[x] = new Coord(current.getX()+xunit,current.getY()+yunit);
+			if(Math.random()<=.9){
+				sensorReading[x] = map.getCell(coordData[x]).getType();
+			}else if(Math.random()>.9 && Math.random()<=.95){
+				switch(map.getCell(coordData[x]).getType()){
+				case 'N':
+					sensorReading[x] = 'H';
+					break;
+				case 'H':
+					sensorReading[x] = 'T';
+					break;
+				case 'T':
+					sensorReading[x] = 'N';
+					break;
+				}
+			}else{
+				switch(map.getCell(coordData[x]).getType()){
+				case 'N':
+					sensorReading[x] = 'T';
+					break;
+				case 'H':
+					sensorReading[x] = 'N';
+					break;
+				case 'T':
+					sensorReading[x] = 'H';
+					break;
+				}
+			}
+			current = coordData[x];
+		}
+		for(int x=0;x<moveSize;x++){
+			linesToWrite.add(coordData[x].toString());
+		}
+		for(int x=0;x<moveSize;x++){
+			linesToWrite.add(moveData[x]+"");
+		}
+		for(int x=0;x<moveSize;x++){
+			linesToWrite.add(sensorReading[x]+"");
+		}
+		
 		Files.write(file, linesToWrite, Charset.forName("UTF-8"));
 
-		return new Map(name);
-	}
-	
-	public static SG[] generateSG(Coord start, Coord goal, Map map) {
-		Random s = new Random(start.getX() + start.getY());
-		Random g = new Random(goal.getX() + goal.getY());
-		SG temp[] = new SG[9];
-		for (int x = 0; x < 9; x++) {
-			int startx = s.nextInt(160), starty = s.nextInt(120);
-			while ((startx > 20 && startx < 140) || (starty > 20 && starty < 100)
-					|| map.getCell(new Coord(startx, starty)).getType() == '0') {
-				startx = s.nextInt(160);
-				starty = s.nextInt(120);
-			}
-			int endx = s.nextInt(160), endy = s.nextInt(120);
-			while ((endx > 20 && endx < 140) || (endy > 20 && endy < 100)
-					|| (Math.sqrt(Math.pow(endx - startx, 2) + Math.pow(endy - starty, 2)) < 100)
-					|| map.getCell(new Coord(endx, endy)).getType() == '0') {
-				endx = s.nextInt(160);
-				endy = s.nextInt(120);
-			}
-			temp[x] = new SG(new Coord(startx, starty), new Coord(endx, endy));
-		}
-
-		return temp;
+		return new TruthData(name);
 	}
 
 }
