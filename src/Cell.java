@@ -15,6 +15,7 @@ public class Cell {
 	public Cell(int x, int y, char type) {
 		coords = new Coord(x, y);
 		this.type = type;
+		probability=0;
 	}
 
 	public char getType() {

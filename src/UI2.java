@@ -169,11 +169,12 @@ public class UI2 extends javax.swing.JFrame implements ActionListener, MouseWhee
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				// TODO Auto-generated method stub
-				if(Map.getMap()==null)
+				if(!Map.isMoveStates())
 					return;
 				JSlider source = (JSlider) e.getSource();
 				//set map step
 				label9.setText("Step: " + (int) source.getValue());
+				Map.setStep(source.getValue());
 			}
 		});
 		
@@ -436,8 +437,20 @@ public class UI2 extends javax.swing.JFrame implements ActionListener, MouseWhee
 	private void changeGoalButtonActionPerformed(java.awt.event.ActionEvent evt) {
 		// TODO add your handling code here:
 		// change moves
+		String moveWanted = goalList.getSelectedValue();
+		TruthData temp = null;
+		for(int x=0;x<LoadedTruth.length;x++){
+			if(moveWanted.contains(LoadedTruth[x].getName())){
+				temp =  LoadedTruth[x];
+			}
+		}
+		Map[] steps = FilterAlgorithm.filter(temp, Map.getCurrentMap());
 		
-		
+		System.out.println(steps.length);
+		Map.setMoveStates(steps.length-1, steps);
+		moveSlider.setMaximum(steps.length-1);
+		moveSlider.setValue(steps.length-1);
+		System.out.println("Set moves!");
 		
 	}
 

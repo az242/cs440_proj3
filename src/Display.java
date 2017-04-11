@@ -24,7 +24,10 @@ public class Display extends Applet implements MouseListener, ActionListener, Mo
 	double zoom;
 	int WIDTH, HEIGHT;
 	Timer myTimer;
-
+	
+	
+	int currentStep;
+	Map[] moveStates;
 	public Display(int width, int height) {
 		WIDTH = width;
 		HEIGHT = height;
@@ -35,24 +38,24 @@ public class Display extends Applet implements MouseListener, ActionListener, Mo
 		showMap = false;
 		showStats = false;
 		setScale = false;
+		currentStep=0;
 		Timer myTimer;
 		myTimer = new Timer(30, this);
 		myTimer.start();
 	}
-
-	public Display(int width, int height, Map map) {
-		addMouseListener(this);
-		addMouseMotionListener(this);
-		WIDTH = width;
-		HEIGHT = height;
-		reset();
-		this.map = map;
-		setScale = false;
-		showMap = true;
-		myTimer = new Timer(30, this);
-		myTimer.start();
+	public void setMoveStates(int step,Map[] moves){
+		currentStep=step;
+		moveStates=moves;
 	}
-
+	public boolean isMoveStates(){
+		if(moveStates==null){
+			return false;
+		}
+		return true;
+	}
+	public void setStep(int step){
+		currentStep=step;
+	}
 	public void updateSize(int width, int height) {
 		WIDTH = width;
 		HEIGHT = height;
@@ -147,7 +150,6 @@ public class Display extends Applet implements MouseListener, ActionListener, Mo
 		}
 
 	}
-
 	public void drawStats(Graphics g) {
 		int infoLine = 1;
 		g.setColor(Color.RED);
@@ -178,13 +180,22 @@ public class Display extends Applet implements MouseListener, ActionListener, Mo
 			g.drawString("type: " + temp, mouse[0], mouse[1] - (infoLine * 20));
 			infoLine++;
 		}
+		if(moveStates!=null && (int) ((mouse[0] + screen[0]) / zoom) >=0 && (int) ((mouse[0] + screen[0]) / zoom)<map.getCellMap().length
+				&&  (int) ((mouse[1] + screen[1]) / zoom) >=0 && (int) ((mouse[1] + screen[1]) / zoom)<map.getCellMap().length){
+			g.drawString("probability: "+moveStates[currentStep].getCellMap()[(int) ((mouse[0] + screen[0]) / zoom)][(int) ((mouse[1] + screen[1]) / zoom)].getProbability(), mouse[0], mouse[1] - (infoLine * 20));
+		}
 	}
 	
 	public void drawMap(Graphics g) {
 		for (int x = 0; x < map.getCellMap().length; x++) {
 			for (int y = 0; y < map.getCellMap()[x].length; y++) {
 				Color temp = new Color(50, 50, 50);
-				double factor = 1/(Math.abs(Math.log(map.getCellMap()[x][y].getProbability())/Math.log(10)));
+				double factor=0;
+				if(moveStates==null){
+					factor = 1/(Math.abs(Math.log(map.getCellMap()[x][y].getProbability())/Math.log(10)));
+				}else{
+					factor = 1/(Math.abs(Math.log(moveStates[currentStep].getCellMap()[x][y].getProbability())/Math.log(10)));
+				}
 				switch (map.getCellMap()[x][y].getType()) {
 				case 'B':
 					temp = Color.BLACK;

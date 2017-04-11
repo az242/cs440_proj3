@@ -22,18 +22,32 @@ public class Map {
 		for (int i = 0; i < dimensions; i++) {
 			rows[i] = sc.next();
 		}
-		
+		int count = 0;
 		for (int i = 0; i < dimensions; i++) {
 			for (int j = 0; j < dimensions; j++) {
 				this.cellArr[j][i] = new Cell(j, i, rows[i].charAt(j));
+				if(this.cellArr[j][i].getType()=='B'){
+					count++;
+				}
 			}
 		}
-
-		/*
-		 * for (int i = 0; i < 160; i++) { String row = sc.next(); for (int j =
-		 * 0; j < 120; j++) { this.mapArr[i][j] = row.charAt(j);
-		 * this.cellArr[i][j] = new Cell(i, j, row.charAt(j)); } }
-		 */
+		for (int i = 0; i < dimensions; i++) {
+			for (int j = 0; j < dimensions; j++) {
+				if(this.cellArr[j][i].getType()!='B'){
+					this.cellArr[j][i].setProbability(1.0/( (dimensions*dimensions)-count) );
+				}
+			}
+		}
+	}
+	public Map(Map map){
+		this.cellArr = new Cell[map.getCellMap().length][map.getCellMap().length];
+		for(int x=0;x<map.getCellMap().length;x++){
+			for(int y=0;y<map.getCellMap().length;y++){
+				this.cellArr[x][y] =  new Cell(x, y, map.getCellMap()[x][y].getType());
+				this.cellArr[x][y].setProbability(map.getCellMap()[x][y].getProbability());
+			}
+		}
+		name = map.getName();
 	}
 
 	public String getName() {
@@ -56,5 +70,14 @@ public class Map {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	public void copy(Map map){
+		this.cellArr = new Cell[map.getCellMap().length][map.getCellMap().length];
+		for(int x=0;x<map.getCellMap().length;x++){
+			for(int y=0;y<map.getCellMap().length;y++){
+				this.cellArr[x][y] =  new Cell(x, y, map.getCellMap()[x][y].getType());
+				this.cellArr[x][y].setProbability(map.getCellMap()[x][y].getProbability());
+			}
+		}
 	}
 }

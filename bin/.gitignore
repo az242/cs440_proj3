@@ -2,9 +2,9 @@
 /Coord.class
 /Display.class
 /FileUtils.class
+/FilterAlgorithm.class
 /Map.class
 /MapGenerator.class
-/SG.class
 /TruthData.class
 /UI2$1.class
 /UI2$10.class
@@ -18,4 +18,3 @@
 /UI2$9.class
 /UI2.class
 /test.class
-/FilterAlgorithm.class
