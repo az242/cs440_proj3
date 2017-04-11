@@ -21,7 +21,7 @@ public class FilterAlgorithm {
 									prob=.9;
 								}
 								//1
-								mapSteps[x-1].getCellMap()[y][z].setProbability(prob*mapSteps[x-1].getCellMap()[y][z].getProbability());
+								mapSteps[x].getCellMap()[y][z].setProbability(prob*mapSteps[x-1].getCellMap()[y][z].getProbability());
 							}else{
 								//can't move up and not at the bottom
 								double prob = .05;
@@ -29,7 +29,7 @@ public class FilterAlgorithm {
 									prob=.9;
 								}
 								//1 + p(move)
-								mapSteps[x-1].getCellMap()[y][z].setProbability(prob*mapSteps[x-1].getCellMap()[y][z].getProbability()
+								mapSteps[x].getCellMap()[y][z].setProbability(prob*mapSteps[x-1].getCellMap()[y][z].getProbability()
 										+ prob*.9*mapSteps[x-1].getCellMap()[y+1][z].getProbability());
 							}
 						}else{
@@ -41,7 +41,7 @@ public class FilterAlgorithm {
 									prob=.9;
 								}
 								//p(Fmove)
-								mapSteps[x-1].getCellMap()[y][z].setProbability(prob*.1*mapSteps[x-1].getCellMap()[y][z].getProbability());
+								mapSteps[x].getCellMap()[y][z].setProbability(prob*.1*mapSteps[x-1].getCellMap()[y][z].getProbability());
 							}else{
 								//add prev cell prob, 
 								double prob = .05;
@@ -49,7 +49,7 @@ public class FilterAlgorithm {
 									prob=.9;
 								}
 								//p(Fmove) + p(move)
-								mapSteps[x-1].getCellMap()[y][z].setProbability(prob*.1*mapSteps[x-1].getCellMap()[y][z].getProbability()
+								mapSteps[x].getCellMap()[y][z].setProbability(prob*.1*mapSteps[x-1].getCellMap()[y][z].getProbability()
 										+ prob*.9*mapSteps[x-1].getCellMap()[y+1][z].getProbability());
 							}
 						}
@@ -63,7 +63,7 @@ public class FilterAlgorithm {
 									prob=.9;
 								}
 								//1
-								mapSteps[x-1].getCellMap()[y][z].setProbability(prob*mapSteps[x-1].getCellMap()[y][z].getProbability());
+								mapSteps[x].getCellMap()[y][z].setProbability(prob*mapSteps[x-1].getCellMap()[y][z].getProbability());
 							}else{
 								//can't move up and not at the bottom
 								double prob = .05;
@@ -71,7 +71,7 @@ public class FilterAlgorithm {
 									prob=.9;
 								}
 								//1 + p(move)
-								mapSteps[x-1].getCellMap()[y][z].setProbability(prob*mapSteps[x-1].getCellMap()[y][z].getProbability()
+								mapSteps[x].getCellMap()[y][z].setProbability(prob*mapSteps[x-1].getCellMap()[y][z].getProbability()
 										+ prob*.9*mapSteps[x-1].getCellMap()[y-1][z].getProbability());
 							}
 						}else{
@@ -83,7 +83,7 @@ public class FilterAlgorithm {
 									prob=.9;
 								}
 								//p(Fmove)
-								mapSteps[x-1].getCellMap()[y][z].setProbability(prob*.1*mapSteps[x-1].getCellMap()[y][z].getProbability());
+								mapSteps[x].getCellMap()[y][z].setProbability(prob*.1*mapSteps[x-1].getCellMap()[y][z].getProbability());
 							}else{
 								//add prev cell prob, 
 								double prob = .05;
@@ -91,7 +91,7 @@ public class FilterAlgorithm {
 									prob=.9;
 								}
 								//p(Fmove) + p(move)
-								mapSteps[x-1].getCellMap()[y][z].setProbability(prob*.1*mapSteps[x-1].getCellMap()[y][z].getProbability()
+								mapSteps[x].getCellMap()[y][z].setProbability(prob*.1*mapSteps[x-1].getCellMap()[y][z].getProbability()
 										+ prob*.9*mapSteps[x-1].getCellMap()[y-1][z].getProbability());
 							}
 						}
@@ -106,7 +106,7 @@ public class FilterAlgorithm {
 									prob=.9;
 								}
 								//1
-								mapSteps[x-1].getCellMap()[y][z].setProbability(prob*mapSteps[x-1].getCellMap()[y][z].getProbability());
+								mapSteps[x].getCellMap()[y][z].setProbability(prob*mapSteps[x-1].getCellMap()[y][z].getProbability());
 							}else{
 								//can't move left and not at the right
 								double prob = .05;
@@ -114,7 +114,7 @@ public class FilterAlgorithm {
 									prob=.9;
 								}
 								//1 + p(move)
-								mapSteps[x-1].getCellMap()[y][z].setProbability(prob*mapSteps[x-1].getCellMap()[y][z].getProbability()
+								mapSteps[x].getCellMap()[y][z].setProbability(prob*mapSteps[x-1].getCellMap()[y][z].getProbability()
 										+ prob*.9*mapSteps[x-1].getCellMap()[y][z+1].getProbability());
 							}
 						}else{
@@ -125,7 +125,7 @@ public class FilterAlgorithm {
 									prob=.9;
 								}
 								//p(Fmove)
-								mapSteps[x-1].getCellMap()[y][z].setProbability(prob*.1*mapSteps[x-1].getCellMap()[y][z].getProbability());
+								mapSteps[x].getCellMap()[y][z].setProbability(prob*.1*mapSteps[x-1].getCellMap()[y][z].getProbability());
 							}else{
 								//add prev cell prob, 
 								double prob = .05;
@@ -133,7 +133,7 @@ public class FilterAlgorithm {
 									prob=.9;
 								}
 								//p(Fmove) + p(move)
-								mapSteps[x-1].getCellMap()[y][z].setProbability(prob*.1*mapSteps[x-1].getCellMap()[y][z].getProbability()
+								mapSteps[x].getCellMap()[y][z].setProbability(prob*.1*mapSteps[x-1].getCellMap()[y][z].getProbability()
 										+ prob*.9*mapSteps[x-1].getCellMap()[y][z+1].getProbability());
 							}
 						}
@@ -148,7 +148,7 @@ public class FilterAlgorithm {
 									prob=.9;
 								}
 								//1
-								mapSteps[x-1].getCellMap()[y][z].setProbability(prob*mapSteps[x-1].getCellMap()[y][z].getProbability());
+								mapSteps[x].getCellMap()[y][z].setProbability(prob*mapSteps[x-1].getCellMap()[y][z].getProbability());
 							}else{
 								//can't move up and not at the bottom
 								double prob = .05;
@@ -156,7 +156,7 @@ public class FilterAlgorithm {
 									prob=.9;
 								}
 								//1 + p(move)
-								mapSteps[x-1].getCellMap()[y][z].setProbability(prob*mapSteps[x-1].getCellMap()[y][z].getProbability()
+								mapSteps[x].getCellMap()[y][z].setProbability(prob*mapSteps[x-1].getCellMap()[y][z].getProbability()
 										+ prob*.9*mapSteps[x-1].getCellMap()[y][z-1].getProbability());
 							}
 						}else{
@@ -167,7 +167,7 @@ public class FilterAlgorithm {
 									prob=.9;
 								}
 								//p(Fmove)
-								mapSteps[x-1].getCellMap()[y][z].setProbability(prob*.1*mapSteps[x-1].getCellMap()[y][z].getProbability());
+								mapSteps[x].getCellMap()[y][z].setProbability(prob*.1*mapSteps[x-1].getCellMap()[y][z].getProbability());
 							}else{
 								//add prev cell prob, 
 								double prob = .05;
@@ -175,7 +175,7 @@ public class FilterAlgorithm {
 									prob=.9;
 								}
 								//p(Fmove) + p(move)
-								mapSteps[x-1].getCellMap()[y][z].setProbability(prob*.1*mapSteps[x-1].getCellMap()[y][z].getProbability()
+								mapSteps[x].getCellMap()[y][z].setProbability(prob*.1*mapSteps[x-1].getCellMap()[y][z].getProbability()
 										+ prob*.9*mapSteps[x-1].getCellMap()[y][z-1].getProbability());
 							}
 						}
