@@ -72,7 +72,7 @@ public class MapGenerator {
 		return map;
 	}
 	public static TruthData createMoves(String name,int moveSize,Map map) throws IOException {
-		name = map.getName().substring(0,map.getName().length()-4)+"\\"+"total,"+moveSize+","+name+".txt";
+		name = map.getName().substring(0,map.getName().length()-4)+"\\"+"total,"+moveSize+","+name;
 		Path file = Paths.get(name);
 		char[] moveData = new char[moveSize];
 		char[] sensorReading = new char[moveSize];
@@ -110,26 +110,27 @@ public class MapGenerator {
 			int yunit = 0;
 			switch(moveData[x]){
 			case 'U':
-				if(current.getY()-1>=0 && Math.random()<.9)
+				if(current.getY()-1>=0 && map.getCell(current.getX(), current.getY()-1).getType()!='B' && Math.random()<.9)
 					yunit=-1;
 				break;
 			case 'L':
-				if(current.getX()-1>=0 && Math.random()<.9)
+				if(current.getX()-1>=0 && map.getCell(current.getX()-1, current.getY()).getType()!='B' && Math.random()<.9)
 					xunit=-1;
 				break;
 			case 'D':
-				if(current.getY()+1<map.getCellMap().length && Math.random()<.9)
+				if(current.getY()+1<map.getCellMap().length && map.getCell(current.getX(), current.getY()+1).getType()!='B' &&  Math.random()<.9)
 					yunit=1;
 				break;
 			case 'R':
-				if(current.getX()+1<map.getCellMap().length && Math.random()<.9)
+				if(current.getX()+1<map.getCellMap().length && map.getCell(current.getX()+1, current.getY()).getType()!='B' && Math.random()<.9)
 					xunit=1;
 				break;
 			}
 			coordData[x] = new Coord(current.getX()+xunit,current.getY()+yunit);
-			if(Math.random()<=.9){
+			double what = Math.random();
+			if(what<=.9){
 				sensorReading[x] = map.getCell(coordData[x]).getType();
-			}else if(Math.random()>.9 && Math.random()<=.95){
+			}else if(what>.9 && what<=.95){
 				switch(map.getCell(coordData[x]).getType()){
 				case 'N':
 					sensorReading[x] = 'H';

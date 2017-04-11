@@ -36,8 +36,9 @@ public class TruthData {
 		TrueCordData = new Coord[moveSize];
 		for(int x=0;x<moveSize;x++){
 			TrueCordData[x] = new Coord(sc.next());
+			System.out.println(TrueCordData[x].toString());
 		}
-		
+		System.out.println();
 		MoveData = new char[moveSize];
 		for(int x=0;x<moveSize;x++){
 			MoveData[x] = sc.next().charAt(0);

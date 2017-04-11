@@ -447,8 +447,9 @@ public class UI2 extends javax.swing.JFrame implements ActionListener, MouseWhee
 		Map[] steps = FilterAlgorithm.filter(temp, Map.getCurrentMap());
 		
 		System.out.println(steps.length);
-		Map.setMoveStates(steps.length-1, steps);
+		Map.setMoveStates(steps.length-1, steps,temp);
 		moveSlider.setMaximum(steps.length-1);
+		moveSlider.setMinimum(0);
 		moveSlider.setValue(steps.length-1);
 		System.out.println("Set moves!");
 		
@@ -517,7 +518,7 @@ public class UI2 extends javax.swing.JFrame implements ActionListener, MouseWhee
 					LoadedTruth[x] = tempMaps[x];
 				}
 				LoadedTruth[LoadedTruth.length - 1] = MapGenerator.createMoves(name + ".txt",moveMakerSlider.getValue(),Map.getMap());
-				moveListElements.addElement(name + ".txt");
+				moveListElements.addElement(LoadedTruth[LoadedTruth.length - 1].getName()+" moves: "+LoadedTruth[LoadedTruth.length - 1].getMoveData().length);
 				System.out.println("Created new Move list!");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -633,5 +634,6 @@ public class UI2 extends javax.swing.JFrame implements ActionListener, MouseWhee
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		Map.setShowStats(displayStatsCheckbox.isSelected());
+		Map.setShowFieldData(showDataCheckbox.isSelected());
 	}
 }

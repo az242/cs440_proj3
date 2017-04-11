@@ -19,7 +19,7 @@ import javax.swing.Timer;
 public class Display extends Applet implements MouseListener, ActionListener, MouseMotionListener {
 	int[] screen;
 	int[] mouse;
-	boolean showMap, showStats, setScale;
+	boolean showMap, showStats, setScale,fieldData;
 	Map map;
 	double zoom;
 	int WIDTH, HEIGHT;
@@ -28,6 +28,7 @@ public class Display extends Applet implements MouseListener, ActionListener, Mo
 	
 	int currentStep;
 	Map[] moveStates;
+	TruthData td;
 	public Display(int width, int height) {
 		WIDTH = width;
 		HEIGHT = height;
@@ -37,15 +38,17 @@ public class Display extends Applet implements MouseListener, ActionListener, Mo
 		addMouseMotionListener(this);
 		showMap = false;
 		showStats = false;
+		fieldData = true;
 		setScale = false;
 		currentStep=0;
 		Timer myTimer;
 		myTimer = new Timer(30, this);
 		myTimer.start();
 	}
-	public void setMoveStates(int step,Map[] moves){
+	public void setMoveStates(int step,Map[] moves,TruthData bleh){
 		currentStep=step;
 		moveStates=moves;
+		td=bleh;
 	}
 	public boolean isMoveStates(){
 		if(moveStates==null){
@@ -55,6 +58,10 @@ public class Display extends Applet implements MouseListener, ActionListener, Mo
 	}
 	public void setStep(int step){
 		currentStep=step;
+	}
+	public void setShowFieldData(boolean selected) {
+		// TODO Auto-generated method stub
+		fieldData = selected;
 	}
 	public void updateSize(int width, int height) {
 		WIDTH = width;
@@ -110,6 +117,9 @@ public class Display extends Applet implements MouseListener, ActionListener, Mo
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		if (showMap)
 			drawMap(g);
+		
+		if(fieldData)
+			drawFieldData(g);
 		/*
 		 * uneeded code if (showTabs) drawTabs(g);
 		 */
@@ -195,6 +205,11 @@ public class Display extends Applet implements MouseListener, ActionListener, Mo
 					factor = 1/(Math.abs(Math.log(map.getCellMap()[x][y].getProbability())/Math.log(10)));
 				}else{
 					factor = 1/(Math.abs(Math.log(moveStates[currentStep].getCellMap()[x][y].getProbability())/Math.log(10)));
+					if(factor>1){
+						factor=1;
+					}else if(factor<0){
+						factor=0;
+					}
 				}
 				switch (map.getCellMap()[x][y].getType()) {
 				case 'B':
@@ -210,10 +225,20 @@ public class Display extends Applet implements MouseListener, ActionListener, Mo
 				g.setColor(Color.BLACK);
 				g.drawRect((int) Math.ceil(x * zoom - screen[0]), (int) Math.ceil(y * zoom - screen[1]),
 						(int) Math.ceil(zoom), (int) Math.ceil(zoom));
+				
 			}
 		}
 	}
-
+	public void drawFieldData(Graphics g){
+		if(td==null)
+			return;
+		for(int x=0;x<td.getTrueCordData().length;x++){
+			g.setColor(Color.GREEN);
+			g.drawRect((int) Math.ceil(td.getTrueCordData()[x].getX() * zoom - screen[0]), (int) Math.ceil(td.getTrueCordData()[x].getY() * zoom - screen[1]),
+					(int) Math.ceil(zoom), (int) Math.ceil(zoom));
+		}
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
