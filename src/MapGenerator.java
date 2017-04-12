@@ -88,7 +88,6 @@ public class MapGenerator {
 		//init coord
 		Coord current = new Coord((int)(Math.random()*map.getCellMap().length),(int)(Math.random()*map.getCellMap().length) );
 		linesToWrite.add(current.getX()+" "+current.getY());
-		System.out.println(current.toString());
 		//generate moves
 		for(int x=0;x<moveSize;x++){
 			double temp = Math.random();

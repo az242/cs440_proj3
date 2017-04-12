@@ -194,6 +194,9 @@ public class Display extends Applet implements MouseListener, ActionListener, Mo
 				&&  (int) ((mouse[1] + screen[1]) / zoom) >=0 && (int) ((mouse[1] + screen[1]) / zoom)<map.getCellMap().length){
 			g.drawString("probability: "+moveStates[currentStep].getCellMap()[(int) ((mouse[0] + screen[0]) / zoom)][(int) ((mouse[1] + screen[1]) / zoom)].getProbability(), mouse[0], mouse[1] - (infoLine * 20));
 		}
+		if(td!=null){
+			
+		}
 	}
 	
 	public void drawMap(Graphics g) {
@@ -205,11 +208,11 @@ public class Display extends Applet implements MouseListener, ActionListener, Mo
 					factor = 1/(Math.abs(Math.log(map.getCellMap()[x][y].getProbability())/Math.log(10)));
 				}else{
 					factor = 1/(Math.abs(Math.log(moveStates[currentStep].getCellMap()[x][y].getProbability())/Math.log(10)));
-					if(factor>1){
-						factor=1;
-					}else if(factor<0){
-						factor=0;
-					}
+				}
+				if(factor>1){
+					factor=1;
+				}else if(factor<0){
+					factor=0;
 				}
 				switch (map.getCellMap()[x][y].getType()) {
 				case 'B':

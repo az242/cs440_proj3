@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -8,22 +9,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class test {
-	public static void main(String[] args){
-		String currentDir = new File("").getAbsolutePath();
-		String[] test = currentDir.split("\\\\");
-		currentDir = currentDir + "\\" + "name"+ "\\" + "textFile.txt";
-		System.out.println(currentDir);
-		List<String> linesToWrite = new ArrayList<String>();
-		linesToWrite.add("test");
-		Path file = Paths.get(currentDir);
-		for(int x=0;x<test.length;x++){
-			System.out.println(test[x]);
-		}
-		try {
-			Files.write(file, linesToWrite, Charset.forName("UTF-8"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public static void main(String[] args) throws IOException{
+		String output="";
+		//generatemap
+		//generatemoves
+		//filterAlgo
+		//printout data
+		Map map = new Map("onehundred.txt");
+		for(int x=1;x<100;x++){
+			TruthData temp = MapGenerator.createMoves("as3"+x, x, map);
+			Map[] steps = FilterAlgorithm.filter(temp, map);
+			int hx=0,hy=0;
+			for(int y=0;y<steps[0].getCellMap().length;y++){
+				for(int z=0;z<steps[0].getCellMap().length;z++){
+					if(steps[steps.length-1].getCell(y, z).getProbability() > steps[steps.length-1].getCell(hx,hy).getProbability()){
+						hx=y;
+						hy=z;
+					}
+				}
+			}
+			System.out.println("" + x + " "+ Math.sqrt(Math.pow(temp.getTrueCordData()[temp.getTrueCordData().length-1].getX() - hx, 2) + Math.pow(temp.getTrueCordData()[temp.getTrueCordData().length-1].getY() - hy, 2)));
 		}
 	}
 }
