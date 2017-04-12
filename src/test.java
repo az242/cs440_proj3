@@ -16,7 +16,7 @@ public class test {
 		//filterAlgo
 		//printout data
 		Map map = new Map("onehundred.txt");
-		for(int x=50;x<100;x++){
+		for(int x=5;x<50;x++){
 			TruthData temp = MapGenerator.createMoves("as3"+x, x, map);
 			Map[] steps = Algorithms.verterbi(temp, map);
 			int hx=0,hy=0;
