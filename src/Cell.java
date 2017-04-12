@@ -4,6 +4,15 @@ public class Cell {
 	private Coord coords;
 	private char type;
 	private double probability;
+	private Coord contributer;
+	public Coord getContributer() {
+		return contributer;
+	}
+
+	public void setContributer(Coord contributer) {
+		this.contributer = contributer;
+	}
+
 	public double getProbability() {
 		return probability;
 	}
