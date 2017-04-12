@@ -444,7 +444,7 @@ public class UI2 extends javax.swing.JFrame implements ActionListener, MouseWhee
 				temp =  LoadedTruth[x];
 			}
 		}
-		Map[] steps = FilterAlgorithm.filter(temp, Map.getCurrentMap());
+		Map[] steps = Algorithms.filter(temp, Map.getCurrentMap());
 		
 		System.out.println(steps.length);
 		Map.setMoveStates(steps.length-1, steps,temp);

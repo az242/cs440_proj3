@@ -239,6 +239,9 @@ public class Display extends Applet implements MouseListener, ActionListener, Mo
 			g.setColor(Color.GREEN);
 			g.drawRect((int) Math.ceil(td.getTrueCordData()[x].getX() * zoom - screen[0]), (int) Math.ceil(td.getTrueCordData()[x].getY() * zoom - screen[1]),
 					(int) Math.ceil(zoom), (int) Math.ceil(zoom));
+			if(x>1){
+				
+			}
 		}
 	}
 	
