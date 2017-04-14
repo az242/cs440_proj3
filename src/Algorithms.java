@@ -236,7 +236,7 @@ public class Algorithms {
 		}
 		Coord[] path = getPath(mapSteps,max);
 			for(int w=0;w<path.length;w++){
-				System.out.print(path[w].toString() + " -> ");
+				//System.out.print(path[w].toString() + " -> ");
 			}
 		return mapSteps;
 	}
